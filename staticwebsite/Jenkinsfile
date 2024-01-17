@@ -1,21 +1,15 @@
 pipeline {
   agent any
   stages {
-    stage('Clone repo') {
-      steps {
-        dir('build') {
-            git branch: "master", url: "https://github.com/JhonSanz/pythonandfamily_web"
-        } 
-      }
-    }
     stage('Compile and build') {
       agent {
         docker {
-          image 'node:18-alpine3.18'
-          args '-u root'
+          image 'node:18'
         }
       }
       steps {
+        git branch: "master", url: "https://github.com/JhonSanz/pythonandfamily_web"
+        ls pythonandfamily_web
         cd "pythonandfamily_web"
         sh 'npm install'
         sh 'npm run build'
