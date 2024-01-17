@@ -4,7 +4,7 @@ pipeline {
     stage('Clone repo') {
       steps {
         dir('build') {
-            git branch: "main", url: "https://github.com/JhonSanz/pythonandfamily_web"
+            git branch: "master", url: "https://github.com/JhonSanz/pythonandfamily_web"
         } 
       }
     }
