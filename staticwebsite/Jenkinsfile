@@ -1,0 +1,41 @@
+pipeline {
+  agent any
+  stages {
+    stage('Clone repo') {
+      steps {
+        dir('build') {
+            git branch: "main", url: "https://github.com/JhonSanz/pythonandfamily_web"
+        } 
+      }
+    }
+    stage('Compile and build') {
+      agent {
+        docker {
+          image 'node:18-alpine3.18'
+          args '-u root'
+        }
+      }
+      steps {
+        cd "pythonandfamily_web"
+        sh 'npm install'
+        sh 'npm run build'
+      }
+    }
+    stage('Despliegue a AWS S3') {
+      steps {
+        script {
+            def awsAccessKeyId = credentials('aws_access_key_id')
+            def awsSecretKey = credentials('aws_secret_access_key')
+
+            withAWS(region: 'tu_region', credentials: [
+              awsAccessKeyId: awsAccessKeyId,
+              awsSecretKey: awsSecretKey
+            ]) {
+              s3Upload(file: "pythonandfamily_web/build/index.html", bucket: "test-jenkins-staticwebsite", path: "/")
+            }
+        }
+      }
+    }
+  }
+}
+
