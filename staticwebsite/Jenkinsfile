@@ -19,21 +19,21 @@ pipeline {
         }
       }
     }
-    // stage('Despliegue a AWS S3') {
-    //   steps {
-    //     script {
-    //         def awsAccessKeyId = credentials('aws_access_key_id')
-    //         def awsSecretKey = credentials('aws_secret_access_key')
+    stage('Despliegue a AWS S3') {
+      steps {
+        script {
+            def awsAccessKeyId = credentials('aws_access_key_id')
+            def awsSecretKey = credentials('aws_secret_access_key')
 
-    //         withAWS(region: 'tu_region', credentials: [
-    //           awsAccessKeyId: awsAccessKeyId,
-    //           awsSecretKey: awsSecretKey
-    //         ]) {
-    //           s3Upload(file: "pythonandfamily_web/build/index.html", bucket: "test-jenkins-staticwebsite", path: "/")
-    //         }
-    //     }
-    //   }
-    // }
+            withAWS(region: 'tu_region', credentials: [
+              awsAccessKeyId: awsAccessKeyId,
+              awsSecretKey: awsSecretKey
+            ]) {
+              s3Upload(file: "pythonandfamily_web/build/index.html", bucket: "test-jenkins-staticwebsite", path: "/")
+            }
+        }
+      }
+    }
   }
 }
 
