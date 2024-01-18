@@ -26,8 +26,8 @@ pipeline {
             def awsSecretKey = credentials('aws_secret_access_key')
 
             withAWS(region: 'us-east-1', credentials: [
-              awsAccessKeyId: awsAccessKeyId,
-              awsSecretKey: awsSecretKey
+              awsAccessKeyId: "aws_access_key_id",
+              awsSecretKey: "aws_secret_access_key"
             ]) {
               s3Upload(file: "pythonandfamily_web/build/index.html", bucket: "test-jenkins-staticwebsite", path: "/")
             }
