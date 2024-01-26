@@ -22,14 +22,14 @@ pipeline {
     stage('Despliegue a AWS S3') {
       steps {
         script {
-            def awsAccessKeyId = credentials('aws_access_key_id')
-            def awsSecretKey = credentials('aws_secret_access_key')
-
-            withAWS(region: 'us-east-1', credentials: [
-              awsAccessKeyId: "aws_access_key_id",
-              awsSecretKey: "aws_secret_access_key"
-            ]) {
-              s3Upload(file: "pythonandfamily_web/build/index.html", bucket: "test-jenkins-staticwebsite", path: "/")
+            withCredentials([[
+              $class: 'AmazonWebServicesCredentialsBinding',
+              credentialsId: 'my-credentials',
+              accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+              secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+            ]]) {
+              // s3Upload(file: "pythonandfamily_web/build/index.html", bucket: "test-jenkins-staticwebsite", path: "/")
+              sh "aws s3 ls"
             }
         }
       }
