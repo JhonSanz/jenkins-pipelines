@@ -5,20 +5,20 @@ pipeline {
     }
   }
   stages {
-    stage('Compile and build') {
-      steps {
-        git branch: "master", url: "https://github.com/JhonSanz/pythonandfamily_web"
-        echo 'clone ok'
-        sh 'pwd'
-        dir("pythonandfamily_web") {
-          echo 'Changed to directory:'
-          sh 'pwd'
-          sh 'npm install'
-          sh 'npm run build'
-          sh 'ls'
-        }
-      }
-    }
+    // stage('Compile and build') {
+    //   steps {
+    //     git branch: "master", url: "https://github.com/JhonSanz/pythonandfamily_web"
+    //     echo 'clone ok'
+    //     sh 'pwd'
+    //     dir("pythonandfamily_web") {
+    //       echo 'Changed to directory:'
+    //       sh 'pwd'
+    //       sh 'npm install'
+    //       sh 'npm run build'
+    //       sh 'ls'
+    //     }
+    //   }
+    // }
     stage('Despliegue a AWS S3') {
       steps {
         script {
