@@ -29,7 +29,7 @@ pipeline {
               secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
             ]]) {
               // s3Upload(file: "pythonandfamily_web/build/index.html", bucket: "test-jenkins-staticwebsite", path: "/")
-              sh "/usr/bin/aws s3 ls"
+              sh "aws s3 ls"
             }
         }
       }
