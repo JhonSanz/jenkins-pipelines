@@ -76,7 +76,7 @@ pipeline {
                     sh 'ls'
                     sh 'echo "echo dir pythonandfamily_web"'
                     sh 'ls pythonandfamily_web'
-                    dir("pythonandfamily_web") {
+                    dir("/var/lib/jenkins/workspace/static-website-pipeline/pythonandfamily_web") {
                         echo 'Changed to directory:'
                         sh 'pwd'
                         sh 'ls'
