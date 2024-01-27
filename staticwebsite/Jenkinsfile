@@ -50,10 +50,13 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 script {
-                    sh 'echo "CLONE REPO"'
-                    sh 'ls -la'
-                    git branch: "master", url: "https://github.com/JhonSanz/pythonandfamily_web"
-                    sh 'ls -la'
+                    dir('files_app') {
+                        sh 'echo "CLONE REPO"'
+                        sh 'ls -la'
+                        sh 'pwd'
+                        git branch: "master", url: "https://github.com/JhonSanz/pythonandfamily_web"
+                        sh 'ls -la'
+                    }
                 }
             }
         }
@@ -68,11 +71,13 @@ pipeline {
             }
             steps {
                 script {
-                    sh 'echo "BUILD STAGE"'
-                    sh 'ls -la'
-                    sh 'ls pythonandfamily_web'
-                    sh 'npm install'
-                    sh 'npm run build'
+                    dir('files_app') {
+                        sh 'echo "BUILD STAGE"'
+                        sh 'pwd'
+                        sh 'ls -la'
+                        sh 'npm install'
+                        sh 'npm run build'
+                    }
                 }
             }
         }
