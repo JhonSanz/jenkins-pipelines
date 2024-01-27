@@ -1,48 +1,3 @@
-// pipeline {
-//   // agent {
-//   //   docker {
-//   //     image 'node:18'
-//   //   }
-//   // }
-//   agent any
-//   stages {
-//     stage('Compile and build') {
-//       steps {
-//         git branch: "master", url: "https://github.com/JhonSanz/pythonandfamily_web"
-//         echo 'clone ok'
-//         sh 'pwd'
-//         dir("pythonandfamily_web") {
-//           echo 'Changed to directory:'
-//           sh 'pwd'
-//           sh 'npm install'
-//           sh 'npm run build'
-//           sh 'ls'
-//         }
-//       }
-//     }
-//     stage('Despliegue a AWS S3') {
-//       steps {
-//         script {
-//             sh 'whoami'
-//             sh 'which aws'
-//             sh 'env|grep PATH'
-
-//             withCredentials([[
-//               $class: 'AmazonWebServicesCredentialsBinding',
-//               credentialsId: 'my-aws-credentials',
-//               accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-//               secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-//             ]]) {
-//               // s3Upload(file: "pythonandfamily_web/build/index.html", bucket: "test-jenkins-staticwebsite", path: "/")
-//               sh "aws s3 ls"
-//             }
-//         }
-//       }
-//     }
-//   }
-// }
-
-
 pipeline {
     agent any
 
@@ -52,10 +7,7 @@ pipeline {
                 script {
                     dir('files_app') {
                         sh 'echo "CLONE REPO"'
-                        sh 'ls -la'
-                        sh 'pwd'
                         git branch: "master", url: "https://github.com/JhonSanz/pythonandfamily_web"
-                        sh 'ls -la'
                     }
                 }
             }
@@ -73,8 +25,6 @@ pipeline {
                 script {
                     dir('files_app') {
                         sh 'echo "BUILD STAGE"'
-                        sh 'pwd'
-                        sh 'ls -la'
                         sh 'npm install'
                         sh 'npm run build'
                     }
@@ -91,8 +41,7 @@ pipeline {
                       accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                       secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                     ]]) {
-                      sh "aws s3 ls"
-                      sh "aws s3 cp files_app s3://test-jenkins-staticwebsite/ --recursive"
+                      sh "aws s3 cp files_app/build s3://test-jenkins-staticwebsite/ --recursive"
                     }
                 }
             }
