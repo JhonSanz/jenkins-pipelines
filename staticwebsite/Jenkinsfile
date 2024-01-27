@@ -23,7 +23,7 @@ pipeline {
       steps {
         script {
             sh 'echo "PATH antes: $PATH"'
-            sh 'export PATH="/usr/local/bin:$PATH"'
+            sh 'export PATH="/usr/local/bin/aws:$PATH"'
             sh 'echo "PATH después: $PATH"'
 
             withCredentials([[
