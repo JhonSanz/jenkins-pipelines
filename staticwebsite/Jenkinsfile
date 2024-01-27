@@ -22,9 +22,7 @@ pipeline {
     stage('Despliegue a AWS S3') {
       steps {
         script {
-            sh 'echo "PATH antes: $PATH"'
-            sh 'export PATH="/usr/local/bin/aws:$PATH"'
-            sh 'echo "PATH después: $PATH"'
+            sh 'ls /usr/local/bin/'
 
             withCredentials([[
               $class: 'AmazonWebServicesCredentialsBinding',
