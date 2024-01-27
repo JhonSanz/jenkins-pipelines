@@ -1,44 +1,93 @@
-pipeline {
-  // agent {
-  //   docker {
-  //     image 'node:18'
-  //   }
-  // }
-  agent any
-  stages {
-    // stage('Compile and build') {
-    //   steps {
-    //     git branch: "master", url: "https://github.com/JhonSanz/pythonandfamily_web"
-    //     echo 'clone ok'
-    //     sh 'pwd'
-    //     dir("pythonandfamily_web") {
-    //       echo 'Changed to directory:'
-    //       sh 'pwd'
-    //       sh 'npm install'
-    //       sh 'npm run build'
-    //       sh 'ls'
-    //     }
-    //   }
-    // }
-    stage('Despliegue a AWS S3') {
-      steps {
-        script {
-            sh 'whoami'
-            sh 'which aws'
-            sh 'env|grep PATH'
+// pipeline {
+//   // agent {
+//   //   docker {
+//   //     image 'node:18'
+//   //   }
+//   // }
+//   agent any
+//   stages {
+//     stage('Compile and build') {
+//       steps {
+//         git branch: "master", url: "https://github.com/JhonSanz/pythonandfamily_web"
+//         echo 'clone ok'
+//         sh 'pwd'
+//         dir("pythonandfamily_web") {
+//           echo 'Changed to directory:'
+//           sh 'pwd'
+//           sh 'npm install'
+//           sh 'npm run build'
+//           sh 'ls'
+//         }
+//       }
+//     }
+//     stage('Despliegue a AWS S3') {
+//       steps {
+//         script {
+//             sh 'whoami'
+//             sh 'which aws'
+//             sh 'env|grep PATH'
 
-            withCredentials([[
-              $class: 'AmazonWebServicesCredentialsBinding',
-              credentialsId: 'my-aws-credentials',
-              accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-              secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-            ]]) {
-              // s3Upload(file: "pythonandfamily_web/build/index.html", bucket: "test-jenkins-staticwebsite", path: "/")
-              sh "aws s3 ls"
+//             withCredentials([[
+//               $class: 'AmazonWebServicesCredentialsBinding',
+//               credentialsId: 'my-aws-credentials',
+//               accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+//               secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+//             ]]) {
+//               // s3Upload(file: "pythonandfamily_web/build/index.html", bucket: "test-jenkins-staticwebsite", path: "/")
+//               sh "aws s3 ls"
+//             }
+//         }
+//       }
+//     }
+//   }
+// }
+
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                script {
+                    git branch: "master", url: "https://github.com/JhonSanz/pythonandfamily_web"
+                }
             }
         }
-      }
-    }
-  }
-}
 
+        stage('Compile Next.js App') {
+            agent {
+                docker {
+                    image 'node:18'
+                }
+            }
+            steps {
+                script {
+                    dir("pythonandfamily_web") {
+                        echo 'Changed to directory:'
+                        sh 'pwd'
+                        sh 'npm install'
+                        sh 'npm run build'
+                        sh 'ls'
+                    }
+                }
+            }
+        }
+
+        stage('Upload to S3') {
+            agent any
+            steps {
+                script {
+                    withCredentials([[
+                      $class: 'AmazonWebServicesCredentialsBinding',
+                      credentialsId: 'my-aws-credentials',
+                      accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                      secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                    ]]) {
+                      sh "aws s3 ls"
+                    }
+                }
+            }
+        }
+    }
+}
