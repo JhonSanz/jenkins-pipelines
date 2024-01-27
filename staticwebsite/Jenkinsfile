@@ -50,7 +50,11 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 script {
+                    sh 'pwd'
+                    sh 'ls'
                     git branch: "master", url: "https://github.com/JhonSanz/pythonandfamily_web"
+                    sh 'pwd'
+                    sh 'ls'
                 }
             }
         }
@@ -63,12 +67,14 @@ pipeline {
             }
             steps {
                 script {
+                    sh 'pwd'
+                    sh 'ls'
                     dir("pythonandfamily_web") {
                         echo 'Changed to directory:'
                         sh 'pwd'
+                        sh 'ls'
                         sh 'npm install'
                         sh 'npm run build'
-                        sh 'ls'
                     }
                 }
             }
