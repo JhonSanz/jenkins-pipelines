@@ -22,7 +22,9 @@ pipeline {
     stage('Despliegue a AWS S3') {
       steps {
         script {
-            sh 'ls /usr/local/bin/'
+            sh 'whoami'
+            sh 'which aws'
+            sh 'env|grep PATH'
 
             withCredentials([[
               $class: 'AmazonWebServicesCredentialsBinding',
