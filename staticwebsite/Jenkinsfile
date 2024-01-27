@@ -74,6 +74,8 @@ pipeline {
                     sh 'echo "2222222222222222222222222222222222222222222"'
                     sh 'pwd'
                     sh 'ls'
+                    sh 'echo "echo dir pythonandfamily_web"'
+                    sh 'ls pythonandfamily_web'
                     dir("pythonandfamily_web") {
                         echo 'Changed to directory:'
                         sh 'pwd'
