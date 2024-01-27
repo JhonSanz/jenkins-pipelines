@@ -50,11 +50,15 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 script {
+                    sh 'echo "-----------------------------------------"'
                     sh 'pwd'
                     sh 'ls'
+                    sh 'echo "ANTES DE CLONAR"'
                     git branch: "master", url: "https://github.com/JhonSanz/pythonandfamily_web"
+                    sh 'echo "DESPUES DE CLONAR"'
                     sh 'pwd'
                     sh 'ls'
+                    sh 'echo "-----------------------------------------"'
                 }
             }
         }
@@ -67,6 +71,7 @@ pipeline {
             }
             steps {
                 script {
+                    sh 'echo "2222222222222222222222222222222222222222222"'
                     sh 'pwd'
                     sh 'ls'
                     dir("pythonandfamily_web") {
