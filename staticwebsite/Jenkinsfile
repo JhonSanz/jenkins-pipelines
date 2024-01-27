@@ -61,11 +61,13 @@ pipeline {
                 docker {
                     image 'node:18'
                     reuseNode true
+                    args '-u root:root'
                 }
             }
             steps {
                 script {
                     sh 'echo "BUILD STAGE"'
+                    sh 'ls -la'
                     sh 'npm install'
                     sh 'npm run build'
                 }
