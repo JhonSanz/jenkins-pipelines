@@ -51,6 +51,7 @@ pipeline {
             steps {
                 script {
                     sh 'echo "CLONE REPO"'
+                    sh 'ls -la'
                     git branch: "master", url: "https://github.com/JhonSanz/pythonandfamily_web"
                     sh 'ls -la'
                 }
