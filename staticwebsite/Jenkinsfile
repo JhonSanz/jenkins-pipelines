@@ -1,9 +1,10 @@
 pipeline {
-  agent {
-    docker {
-      image 'node:18'
-    }
-  }
+  // agent {
+  //   docker {
+  //     image 'node:18'
+  //   }
+  // }
+  agent any
   stages {
     // stage('Compile and build') {
     //   steps {
@@ -33,7 +34,7 @@ pipeline {
               secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
             ]]) {
               // s3Upload(file: "pythonandfamily_web/build/index.html", bucket: "test-jenkins-staticwebsite", path: "/")
-              sh "/usr/local/bin/aws s3 ls"
+              sh "aws s3 ls"
             }
         }
       }
