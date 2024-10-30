@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_ACCOUNT_ID = '381492051946'        
+        AWS_REGION = 'us-east-1'                             
+        REPO_NAME = 'yoxdo-images'                 
+        LOCAL_TAG = 'yoxdo-company'                 
+        IMAGE_TAG = 'company'  
+        TAG_NUMBER = '0.0.1'                               
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main', 
+                url: 'https://github.com/JhonSanz/yoxdo.com-company-micro',
+                credentialsId: 'yoxdo.com-company-micro'
+            }
+        }
+
+        stage('Build Docker'){
+            steps{
+                script{
+                    sh '''
+                    echo 'Buid Docker Image'
+                    echo $TEST_CREDENTIAL
+                    docker build -f prod.dockerfile -t ${LOCAL_TAG}:${TAG_NUMBER} .
+                    '''
+                }
+            }
+        }
+
+        stage('Push to ECR') {
+            steps {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'yoxdo.com-aws-credentials']]) {
+                    script {
+                        sh '''
+                        echo 'Logging into ECR'
+                        aws --version
+
+                        aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+
+                        echo 'Tagging Image'
+                        docker tag ${LOCAL_TAG}:${TAG_NUMBER} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REPO_NAME}:${IMAGE_TAG}-${TAG_NUMBER}
+
+                        echo 'Pushing Image to ECR'
+                        docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REPO_NAME}:${IMAGE_TAG}-${TAG_NUMBER}
+                        '''
+                    }
+                }
+            }
+        }
+    }
+}
