@@ -24,3 +24,8 @@ Para este ejercicio utilizaré microservicios hechos con fastAPi (lo cual no es 
 5. Le damos click a agregar credencial y en la opción username and password, ponemos el username de nuestro github y el password el token que generamos
 6. Ahora ponemos el nombre de la rama (ya sea master o main)
 7. Y finalmente el path con el jenkinsfile
+
+
+# EJEMPLO DE CREDENCIALES
+
+![credentials_example](credentials_example.png)
